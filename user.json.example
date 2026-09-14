@@ -1,17 +1,17 @@
 [
   {
-    "remark": "自定义用户备注名称",
-    "phone": "手机号",
-    "password": "密码",
-    "province": "xx省",
-    "city": "xx市",
-    "area": "xx区",
-    "address": "最终打卡页面显示的文字，xx省 · xx市 · 某路边",
-    "longitude": "经度(精确到小数点后六位)",
-    "latitude": "纬度(精确到小数点后六位)",
+    "remark": "董雪怡",
+    "phone": "15545058874",
+    "password": "Dxy366498394",
+    "province": "浙江省",
+    "city": "杭州市",
+    "area": "余杭区",
+    "address": "最终打卡页面显示的文字，浙江省 · 杭州市 · 余杭区瓶窑镇崇化村蒿山头46号",
+    "longitude": "119.967420",
+    "latitude": "30.353507",
     "randomLocation": true,
     "enable": true,
-    "desc": "打卡备注",
-    "pushKey": "pushplus官网获取的key，需要实名"
+    "desc": " ",
+    "pushKey": "b9fb07b1b8864816883eda9e02d08281"
   }
 ]
