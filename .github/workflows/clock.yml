@@ -3,10 +3,9 @@ name: "打卡"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 08 * * 1-5"  # 上班卡-每天8点30分
-    - cron: "00 09 * * 1-5"  # 额外打卡检查(避免漏签)-每天9点00分
-    - cron: "30 17 * * 1-5"  # 下班卡-每天17点30分
-    - cron: "00 18 * * 1-5"  # 额外打卡检查(避免漏签)-每天18点00分
+    # 北京 8:00-8:30 内随机执行，两个 cron 冗余，重复无所谓
+    - cron: "0 0 * * 1-5"    # 北京 8:00 触发
+    - cron: "15 0 * * 1-5"   # 北京 8:15 触发（冗余）
 
 jobs:
   build:
@@ -18,7 +17,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.8'
-        
+
     - name: Install depend
       run: |
         pip install certifi
@@ -32,8 +31,23 @@ jobs:
         pip install requests
         pip install urllib3
 
+    - name: Random delay into 08:00-08:30 window
+      shell: bash
+      run: |
+        case "${{ github.event.schedule }}" in
+          "0 0 * * 1-5")  window=1800 ;;  # 北京 8:00 触发，0–1799 秒
+          "15 0 * * 1-5") window=900  ;;  # 北京 8:15 触发，0–899 秒
+          *)              window=0    ;;  # 手动触发不延迟
+        esac
+        if [ "$window" -gt 0 ]; then
+          delay=$((RANDOM % window))
+          echo "Sleeping $delay s (window=$window) at $(TZ=Asia/Shanghai date '+%F %T')"
+          sleep "$delay"
+        fi
+
     - name: Start sign
       env:
         USER: ${{ secrets.USER }}
       run: |
+        echo "实际执行时间（北京）：$(TZ=Asia/Shanghai date '+%F %T')"
         python index.py
